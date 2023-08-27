@@ -1,22 +1,37 @@
 <script>
-export default {};
+export default {
+  name: "postPreview",
+
+  props: {
+    post: {
+      type: Object,
+      required: true,
+    },
+    isAdmin: {
+      type: Boolean,
+      required: true,
+    },
+  },
+  computed: {
+    postLink() {
+      return `/${this.isAdmin ? "admin" : "posts"}/${this.post.id}`;
+    },
+  },
+};
 </script>
 <template>
-  <nuxt-link :to="`blogs/${1}`" class="post-preview">
+  <nuxt-link :to="postLink" class="post-preview">
     <article>
       <div
         class="post-thumbnail"
-        style="
-          background-image: url('https://www.tatvasoft.com/outsourcing/wp-content/uploads/2021/10/What-is-Vue-js-1-1.jpg');
-        "
+        style="`background-image: url(${post.thumbnail}) `"
       ></div>
       <div>
         <div class="post-content">
-          <h4>My journey through vue.js</h4>
-          <p>posted on: dec 4, 2023</p>
+          <h4>{{ post.title }}</h4>
+          <p>{{ post.posted_date }}</p>
           <p>
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Officia,
-            obcaecati.
+            {{ post.preview_text }}
           </p>
           <p>Read more...</p>
         </div>

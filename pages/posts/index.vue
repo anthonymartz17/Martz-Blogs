@@ -1,10 +1,17 @@
 <script>
-import PostPreview from "@/components/Posts/PostPreview.vue";
+import PostList from "@/components/Posts/PostList.vue";
+
 export default {
   name: "blogPosts",
 
   components: {
-    PostPreview  },
+    PostList,
+  },
+  computed: {
+    loadedPosts() {
+      return this.$store.getters.loadedPosts
+    }
+  }
 };
 </script>
 <template>
@@ -13,7 +20,7 @@ export default {
       <h1>Get the latest tech news!</h1>
     </section>
     <section class="featured-posts">
-      <PostPreview />
+      <PostList :isAdmin="false" :posts="loadedPosts" />
     </section>
   </div>
 </template>
@@ -23,6 +30,7 @@ export default {
   position: relative;
   padding: 30px;
   box-sizing: border-box;
+  background-image: url("~assets/images/main-page-background.jpg");
   background-position: center;
   background-size: cover;
 }
@@ -56,5 +64,4 @@ export default {
   align-items: center;
   justify-content: center;
 }
-
 </style>
