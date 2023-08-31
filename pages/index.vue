@@ -1,11 +1,6 @@
 <script>
-import PostList from "@/components/Posts/PostList.vue";
 export default {
   name: "blogPosts",
-
-  components: {
-    PostList,
-  },
 
   computed: {
     loadedPosts() {

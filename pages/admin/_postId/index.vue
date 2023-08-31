@@ -2,14 +2,16 @@
 import AdminPostForm from "@/components/Admin/AdminPostForm.vue";
 export default {
   layout: "admin",
+  middleware: "auth",
   components: {
     AdminPostForm,
   },
   async asyncData(context) {
     try {
       const res = await context.$axios.$get(
-        `https://blogging-nuxt-app-default-rtdb.firebaseio.com/posts/${context.params.postId}.json`
+        `/posts/${context.params.postId}.json`
       );
+
       return { loadedPost: res };
     } catch (error) {
       context.error(error);
@@ -21,9 +23,11 @@ export default {
   },
   methods: {
     async tryUpdate(postData) {
-      console.log("component");
       try {
-        await this.$store.dispatch('updatePost',postData);
+        await this.$store.dispatch("updatePost", {
+          id: this.$route.params.postId,
+          postData,
+        });
         this.$router.push("/admin");
       } catch (error) {
         throw error;

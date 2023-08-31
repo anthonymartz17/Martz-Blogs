@@ -1,11 +1,7 @@
 <script>
-import AppControlInput from "@/components/UI-Components/AppControlInput.vue";
-import AppButton from "@/components/UI-Components/AppButton.vue";
+
 export default {
-  components: {
-    AppControlInput,
-    AppButton,
-  },
+
   props: {
     post: {
       type: Object,

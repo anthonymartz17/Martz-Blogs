@@ -3,9 +3,7 @@ export default {
   name: "SingleBlog",
   async asyncData(context) {
     try {
-      const res = await context.$axios.$get(
-        `https://blogging-nuxt-app-default-rtdb.firebaseio.com/posts/${context.params.id}.json`
-      );
+      const res = await context.$axios.$get(`/posts/${context.params.id}.json`);
       return { post: res };
     } catch (error) {
       context.error(error);
@@ -25,6 +23,7 @@ export default {
       <div>
         <div>
           <span>{{ post.author }}</span>
+          <span>{{ post.date_posted | date }}</span>
         </div>
       </div>
 

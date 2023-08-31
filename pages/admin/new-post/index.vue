@@ -9,13 +9,10 @@ export default {
   methods: {
     async onSubmitted(postData) {
       try {
-        const response = await axios.post(
-          "https://blogging-nuxt-app-default-rtdb.firebaseio.com/posts.json",
-          postData
-        );
-        
+        postData.date_posted = new Date();
+        const response = await axios.post("/posts.json", postData);
       } catch (error) {
-        throw error
+        throw error;
       }
     },
   },

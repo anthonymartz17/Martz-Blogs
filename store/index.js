@@ -19,9 +19,7 @@ const createStore = () => {
     actions: {
       async nuxtServerInit({ commit }, context) {
         try {
-          const res = await this.$axios.$get(
-            "https://blogging-nuxt-app-default-rtdb.firebaseio.com/posts.json"
-          );
+          const res = await this.$axios.$get(`/posts.json`);
           const posts = [];
           for (const key in res) {
             posts.push({ id: key, ...res[key] });
@@ -35,13 +33,13 @@ const createStore = () => {
       // setPosts({ commit }, posts) {
       //   commit("SET_POSTS", posts);
       // },
-      async updatePost({ commit }, postData) {
-        console.log(postData,'state')
+      async updatePost({ commit }, { id, postData }) {
         try {
-          const updatedPost = await this.$axios.$post(
-            `https://blogging-nuxt-app-default-rtdb.firebaseio.com/posts/${postData.id}.json`,
+          const updatedPost = await this.$axios.$put(
+            `/posts/${id}.json`,
             postData
           );
+          updatedPost.id = id;
           commit("UPDATE_POST", updatedPost);
         } catch (error) {
           throw error;
