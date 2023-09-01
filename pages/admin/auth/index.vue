@@ -5,17 +5,39 @@ export default {
 
   data() {
     return {
+      user: {},
       isLogin: true,
     };
+  },
+  methods: {
+    async onSubmit() {
+      try {
+        let action = "auth/signIn";
+        if (!this.isLogin) {
+          action = "auth/signUp";
+        }
+        const res = await this.$store.dispatch(action, {
+          ...this.user,
+          returnSecureToken: true,
+        });
+        this.user = {};
+        if (action == "auth/signIn") this.$router.push("/admin");
+        this.isLogin = true;
+      } catch (error) {}
+    },
   },
 };
 </script>
 <template>
   <div class="admin-auth-page">
     <div class="auth-container">
-      <form>
-        <AppControlInput type="email">E-Mail Address</AppControlInput>
-        <AppControlInput type="password">Password</AppControlInput>
+      <form @submit.prevent="onSubmit">
+        <AppControlInput v-model="user.email" type="email"
+          >E-Mail Address</AppControlInput
+        >
+        <AppControlInput v-model="user.password" type="password"
+          >Password</AppControlInput
+        >
         <AppButton type="submit">{{ isLogin ? "Login" : "Sign Up" }}</AppButton>
         <AppButton
           type="button"

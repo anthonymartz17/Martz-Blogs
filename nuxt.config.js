@@ -54,7 +54,9 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
-  env: {},
+  env: {
+    fbAPIKEY: "AIzaSyArHl8uRUHTlPamFQu3nR-Egs9pqkyNbZU",
+  },
 
   transition: {
     name: "fade",

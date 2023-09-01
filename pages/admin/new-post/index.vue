@@ -1,6 +1,6 @@
 <script>
 import AdminPostForm from "@/components/Admin/AdminPostForm.vue";
-import axios from "axios";
+
 export default {
   layout: "admin",
   components: {
@@ -10,7 +10,8 @@ export default {
     async onSubmitted(postData) {
       try {
         postData.date_posted = new Date();
-        const response = await axios.post("/posts.json", postData);
+        await this.$store.dispatch("createPost", postData);
+        this.$router.push("/posts");
       } catch (error) {
         throw error;
       }
