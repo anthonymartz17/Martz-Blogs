@@ -13,7 +13,7 @@ const createStore = () => {
         state.loadedPosts = payload;
       },
       CREATE(state, payload) {
-        state.loadedPosts.push(payload)
+        state.loadedPosts.push(payload);
       },
       UPDATE_POST(state, payload) {
         state.loadedPosts.find((x) => {
@@ -25,6 +25,7 @@ const createStore = () => {
     },
     actions: {
       async nuxtServerInit({ commit }, context) {
+    
         try {
           const res = await this.$axios.$get(`/posts.json`);
           const posts = [];
@@ -40,14 +41,18 @@ const createStore = () => {
       // setPosts({ commit }, posts) {
       //   commit("SET_POSTS", posts);
       // },
-      async createPost({ commit, state }, postData ) {
+      async createPost({ commit, state }, postData) {
         try {
-          const newPost = await this.$axios.$post(
+          const createdPost = {
+            ...postData,
+            date_posted: new Date(),
+          };
+          const res = await this.$axios.$post(
             `/posts/.json?auth=${state.auth.token}`,
-            postData
+            createdPost
           );
-          return newPost
-          // commit("UPDATE_POST", updatedPost);
+          commit("CREATE", { id: res.name, ...createdPost });
+          return newPost;
         } catch (error) {
           throw error;
         }

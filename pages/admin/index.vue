@@ -1,7 +1,8 @@
 <script>
 export default {
-  layout: "admin",
   name: "AdminPage",
+  layout: "admin",
+  middleware: ["check-auth","auth"],
 
   computed: {
     loadedPosts() {

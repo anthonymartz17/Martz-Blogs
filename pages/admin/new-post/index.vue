@@ -3,13 +3,13 @@ import AdminPostForm from "@/components/Admin/AdminPostForm.vue";
 
 export default {
   layout: "admin",
+  middleware: ["check-auth","auth"],
   components: {
     AdminPostForm,
   },
   methods: {
     async onSubmitted(postData) {
       try {
-        postData.date_posted = new Date();
         await this.$store.dispatch("createPost", postData);
         this.$router.push("/posts");
       } catch (error) {
