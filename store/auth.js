@@ -25,7 +25,7 @@ export default {
         console.log(error);
       }
     },
-    async signIn({ commit, dispatch }, user) {
+    async signIn({ commit }, user) {
       try {
         const response = await this.$axios.$post(
           `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.fbAPIKEY}`,
@@ -34,24 +34,23 @@ export default {
 
         const token = response.idToken;
         const tokenExpiration =
-          new Date().getTime() + response.expiresIn * 1000;
+          new Date().getTime() + +response.expiresIn * 1000;
 
         commit("SET_TOKEN", token);
         localStorage.setItem("token", token);
         localStorage.setItem("tokenExpiration", tokenExpiration);
         cookie.set("jwt", token);
         cookie.set("tokenExpiration", tokenExpiration);
-        
-        dispatch("setTimerLogOut", response.expiresIn);
-        console.log(response, "loggedin");
       } catch (error) {
         console.log(error);
       }
     },
+
     autoLogin({ commit, dispatch }, request) {
       let token, tokenExpiration;
-      
+
       if (request) {
+        // if there is request set token with cookie else use localstorage
         if (!request.headers.cookie) {
           return;
         }
@@ -72,19 +71,23 @@ export default {
         }
       } else {
         token = localStorage.getItem("token");
-        tokenExpiration = localStorage.getItem("tokenExpiration");
+        tokenExpiration = +localStorage.getItem("tokenExpiration");
       }
-      if (new Date().getTime() > +tokenExpiration || !token) {
+      if (new Date().getTime() > tokenExpiration || !token) {
+        dispatch("signOut");
         return;
       } else {
-        dispatch("setTimerLogOut", +tokenExpiration - new Date().getTime());
         commit("SET_TOKEN", token);
       }
     },
-    setTimerLogOut({ commit }, expiration) {
-      setTimeout(() => {
-        commit("CLEAR_TOKEN");
-      }, expiration * 1000);
+    signOut({ commit }) {
+      commit("CLEAR_TOKEN");
+      cookie.remove("jwt");
+      cookie.remove("tokenExpiration");
+      if (process.client) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("tokenExpiration");
+      }
     },
   },
   getters: {

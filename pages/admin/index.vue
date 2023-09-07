@@ -2,8 +2,13 @@
 export default {
   name: "AdminPage",
   layout: "admin",
-  middleware: ["check-auth","auth"],
-
+  middleware: ["check-auth", "auth"],
+  methods: {
+    logout() {
+      this.$store.dispatch("auth/signOut")
+      this.$router.push("/admin/aut")
+    },
+  },
   computed: {
     loadedPosts() {
       return this.$store.getters.loadedPosts;
@@ -17,6 +22,7 @@ export default {
       <AppButton @click="$router.push('/admin/new-post')"
         >Create Post</AppButton
       >
+      <AppButton @click="logout">Log Out</AppButton>
     </section>
     <section class="existing-posts">
       <h1>Existing Posts</h1>
